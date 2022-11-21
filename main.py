@@ -1,17 +1,24 @@
-# This is a sample Python script.
+from file_utility.directory_reader import DirectoryReader
+from file_utility.graph_scanner import GraphScanner
+from algorithms.relative_encoding.relative_encoding_algorithm import RelativeEncodingAlgorithm
+from algorithms.sequence_verifier import SequenceVerifier
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-# TODO: implement modular decomposition
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+INSTANCES_PATH = "instances"
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    # TODO: implement modular decomposition
+    files_data = DirectoryReader().read(INSTANCES_PATH)
+    graph_scanner = GraphScanner()
+    algorithm = RelativeEncodingAlgorithm()
+    sequence_verifier = SequenceVerifier()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    for file_data in files_data:
+        file_content, file_name = file_data
+        graph, twinwidth = graph_scanner.read_graph(file_content)
+        sequence = algorithm.__process__(graph)
+        sequence_width = sequence_verifier.calculate_twinwidth(graph, sequence)
+
+        if sequence_width != twinwidth:
+            print(f"Actual twinwidth {twinwidth} is not equal to the width of the sequence {sequence_width} "
+                  f"for file {file_name}")
