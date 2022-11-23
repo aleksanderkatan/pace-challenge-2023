@@ -1,7 +1,4 @@
 from utility import *
-from file_utility.graph_scanner import GraphScanner
-from algorithms.relative_encoding.relative_encoding_algorithm import RelativeEncodingAlgorithm
-from algorithms.sequence_verifier import SequenceVerifier
 import networkx as nx
 import matplotlib.pyplot as plt
 
