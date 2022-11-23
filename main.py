@@ -1,4 +1,5 @@
 from utility import *
+from algorithms.relative_encoding_algorithm import process
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -19,9 +20,8 @@ if __name__ == '__main__':
     for file_name in file_names:
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
+        process(graph)
 
-        draw_graph(graph)
-        break
 
 
         # sequence = algorithm.__process__(graph)
