@@ -1,24 +1,35 @@
-from file_utility.directory_reader import DirectoryReader
+from utility import *
 from file_utility.graph_scanner import GraphScanner
 from algorithms.relative_encoding.relative_encoding_algorithm import RelativeEncodingAlgorithm
 from algorithms.sequence_verifier import SequenceVerifier
+import networkx as nx
+import matplotlib.pyplot as plt
 
-INSTANCES_PATH = "instances"
+INSTANCES_PATH = 'instances'
+
+
+def draw_graph(g: nx.Graph):
+    pos = nx.spring_layout(g)
+    nx.draw_networkx_nodes(g, pos, node_size=256, node_color='green')
+    nx.draw_networkx_edges(g, pos, edgelist=g.edges(), edge_color='black')
+    nx.draw_networkx_labels(g, pos)
+    plt.show()
 
 
 if __name__ == '__main__':
     # TODO: implement modular decomposition
-    files_data = DirectoryReader().read(INSTANCES_PATH)
-    graph_scanner = GraphScanner()
-    algorithm = RelativeEncodingAlgorithm()
-    sequence_verifier = SequenceVerifier()
+    file_names = os.listdir(INSTANCES_PATH)
+    for file_name in file_names:
+        file_path = os.path.join(INSTANCES_PATH, file_name)
+        graph = parse_graph(file_path)
 
-    for file_data in files_data:
-        file_content, file_name = file_data
-        graph, twinwidth = graph_scanner.read_graph(file_content)
-        sequence = algorithm.__process__(graph)
-        sequence_width = sequence_verifier.calculate_twinwidth(graph, sequence)
+        draw_graph(graph)
+        break
 
-        if sequence_width != twinwidth:
-            print(f"Actual twinwidth {twinwidth} is not equal to the width of the sequence {sequence_width} "
-                  f"for file {file_name}")
+
+        # sequence = algorithm.__process__(graph)
+        # sequence_width = sequence_verifier.calculate_twinwidth(graph, sequence)
+        #
+        # if sequence_width != twinwidth:
+        #     print(f"Actual twinwidth {twinwidth} is not equal to the width of the sequence {sequence_width} "
+        #           f"for file {file_name}")
