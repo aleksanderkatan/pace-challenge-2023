@@ -27,7 +27,8 @@ class Encoder:
     def r(self, k, i, j):
         if i < j:
             return self.v["r", k, i, j]
-        return -self.v["r", k, j, i]
+        # no negation here!!!
+        return self.v["r", k, j, i]
 
     # v_i << v_j
     def o(self, i, j):
@@ -112,15 +113,15 @@ class Encoder:
                     if len({i, j, k}) < 3:
                         continue
                     # v1 ----
-                    clause = self.implies(
-                        [self.o(i, j), self.o(i, k), self.r(i, j, k)],
-                        self.a(j, k)
-                    )
-                    # v2 ----
                     # clause = self.implies(
-                    #     [self.r(k, i, j)],
-                    #     self.a(i, j)
+                    #     [self.o(i, j), self.o(i, k), self.r(i, j, k)],
+                    #     self.a(j, k)
                     # )
+                    # v2 ----
+                    clause = self.implies(
+                        [self.r(k, i, j)],
+                        self.a(i, j)
+                    )
                     formula.append(clause)
 
         # subset 1a
@@ -176,15 +177,14 @@ class Encoder:
         return formula
 
 
-def process(graph):
-    for i in range(0, 4):
+def process(graph: nx.Graph):
+    for i in range(0, len(graph.nodes)+1):
         encoder = Encoder(graph, i)
         formula = encoder.encode()
         with Solver(bootstrap_with=formula, name="gluecard4") as solver:
             if solver.solve():
-                # print(solver.get_model())
                 # TODO: decode and return sequence
                 return i
-    return -1
+    raise RuntimeError("How did we get here?")
 
 

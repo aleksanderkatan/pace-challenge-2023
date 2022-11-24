@@ -17,15 +17,10 @@ def draw_graph(g: nx.Graph):
 if __name__ == '__main__':
     # TODO: implement modular decomposition
     file_names = os.listdir(INSTANCES_PATH)
-    for file_name in file_names:
+    expected_results = [1, 2, 0, 0, 3, 0, 2, 4, 1, 2]
+    for file_name, expected_result in zip(sorted(file_names), expected_results):
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
-        tww = process(graph)
-        print(file_path, tww)
+        result = process(graph)
+        print(f"{file_path}: expected: {expected_result}, our: {result}")
 
-        # sequence = algorithm.__process__(graph)
-        # sequence_width = sequence_verifier.calculate_twinwidth(graph, sequence)
-        #
-        # if sequence_width != twinwidth:
-        #     print(f"Actual twinwidth {twinwidth} is not equal to the width of the sequence {sequence_width} "
-        #           f"for file {file_name}")
