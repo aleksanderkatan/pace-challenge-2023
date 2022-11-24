@@ -60,13 +60,13 @@ class Encoder:
         for i in range(1, n+1):
             for j in range(1, n+1):
                 for k in range(1, n+1):
-                    # if all are different
-                    if len({i, j, k}) == 3:
-                        clause = self.implies(
-                            [self.o(i, j), self.o(j, k)],
-                            self.o(i, k)
-                        )
-                        formula.append(clause)
+                    if len({i, j, k}) < 3:
+                        continue
+                    clause = self.implies(
+                        [self.o(i, j), self.o(j, k)],
+                        self.o(i, k)
+                    )
+                    formula.append(clause)
 
         # parents are SMALLER than their children
         for i in range(1, n+1):
@@ -77,36 +77,74 @@ class Encoder:
                 )
                 formula.append(clause)
 
-        # every vertex (except n) is a parent to at least one vertex
+        # every vertex (except v_n) is a parent to at least one vertex
         for i in range(1, n):
             clause = [self.p(i, j) for j in range(i+1, n+1)]
             formula.append(clause)
 
-        # every vertex (except n) is a parent to at most one vertex
+        # every vertex (except v_n) is a parent to at most one vertex
         for i in range(1, n):
             for j in range(i+1, n+1):
                 for k in range(j+1, n+1):
                     clause = [-self.p(i, j), -self.p(i, k)]
                     formula.append(clause)
 
-        # sets 1c and 1d
+        # subsets 1c and 1d
         for i in range(1, n+1):
             for j in range(i+1, n+1):
                 for k in range(1, n+1):
-                    if self._edge_differs(i, j, k):
+                    if len({i, j, k}) < 3:
+                        continue
+                    if not self._edge_differs(i, j, k):
+                        continue
+                    clause = self.implies(
+                        # in the paper there is o(i, k), shouldn't there be o(j, k)?
+                        [self.p(i, j), self.o(i, k)],
+                        self.r(i, j, k)
+                    )
+                    formula.append(clause)
+
+        # subset 1b
+        for i in range(1, n+1):
+            for j in range(i+1, n+1):
+                for k in range(1, n+1):
+                    if len({i, j, k}) < 3:
+                        continue
+                    clause = self.implies(
+                        [self.p(i, j), self.o(i, k), self.a(i, k)],
+                        self.r(i, j, k)
+                    )
+                    formula.append(clause)
+
+        # subset 1a
+        for i in range(1, n+1):
+            for j in range(1, n+1):
+                for k in range(1, n+1):
+                    for m in range(k+1, n+1):
+                        if len({i, j, k, m}) < 4:
+                            continue
                         clause = self.implies(
-                            # in the paper there is o(i, k), shouldn't there be o(j, k)?
-                            [self.p(i, j), self.o(i, k)],
-                            self.r(i, j, k)
+                            [self.o(i, j), self.o(j, k), self.o(j, m), self.r(i, k, m)],
+                            self.r(j, k, m)
                         )
                         formula.append(clause)
 
-        # TODO:
-        # semantics of a
-        # subset 1b
-        # subset 1a
-        # cardinality constraints
+        # a
+        for i in range(1, n+1):
+            for j in range(i+1, n+1):
+                for k in range(1, n+1):
+                    if len({i, j, k}) < 3:
+                        continue
+                    clause = self.implies(
+                        [self.o(i, j), self.o(i, k), self.r(i, j, k)],
+                        self.a(j, k)
+                    )
+                    formula.append(clause)
 
+        # cardinality constraints
+        for i in range(1, n+1):
+            for j in range(1, n+1):
+                formula.append([[self.r(i, j, k) for k in range(j+1, n+1)], self.tww], is_atmost=True)
 
         return formula
 
@@ -114,19 +152,14 @@ class Encoder:
         return self.g.has_edge(i, k) ^ self.g.has_edge(j, k)
 
 
-def encode(g, tww):
-    # TODO: implement
-    pass
-
-
 def process(graph):
-    for i in range(0, 5):
+    for i in range(0, 10):
         encoder = Encoder(graph, i)
         formula = encoder.encode()
-        # with Solver(bootstrap_with=formula) as solver:
-            # if solver.solve():
-            #     print(solver.get_model())
-            #     TODO: decode and return sequence
-                # return i
+        with Solver(bootstrap_with=formula, name="gluecard4") as solver:
+            if solver.solve():
+                # print(solver.get_model())
+                # TODO: decode and return sequence
+                return i
 
 

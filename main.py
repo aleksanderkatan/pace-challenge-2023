@@ -20,9 +20,8 @@ if __name__ == '__main__':
     for file_name in file_names:
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
-        process(graph)
-
-
+        tww = process(graph)
+        print(file_path, tww)
 
         # sequence = algorithm.__process__(graph)
         # sequence_width = sequence_verifier.calculate_twinwidth(graph, sequence)
