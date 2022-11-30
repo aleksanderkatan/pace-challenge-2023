@@ -15,9 +15,9 @@ class Encoder:
     def _initialize_variables(self):
         n = len(self.g.nodes)
 
-        for i in range(1, n+1):
-            for j in range(i+1, n+1):
-                for k in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                for k in range(1, n + 1):
                     self.v["r", k, i, j] = self.pool.id(("r", k, i, j))
                 self.v["o", i, j] = self.pool.id(("o", i, j))
                 self.v["p", i, j] = self.pool.id(("p", i, j))
@@ -59,9 +59,9 @@ class Encoder:
         n = len(self.g.nodes)
 
         # ordering
-        for i in range(1, n+1):
-            for j in range(1, n+1):
-                for k in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
                     clause = self.implies(
@@ -72,8 +72,8 @@ class Encoder:
 
         # parents are bigger than their children
         # i is the child of j => i << j
-        for i in range(1, n+1):
-            for j in range(i+1, n+1):
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
                 clause = self.implies(
                     [self.p(i, j)],
                     self.o(i, j)
@@ -82,20 +82,20 @@ class Encoder:
 
         # every vertex (except v_n) has at least one parent
         for i in range(1, n):
-            clause = [self.p(i, j) for j in range(i+1, n+1)]
+            clause = [self.p(i, j) for j in range(i + 1, n + 1)]
             formula.append(clause)
 
         # every vertex (except v_n) has at most one parent
         for i in range(1, n):
-            for j in range(i+1, n+1):
-                for k in range(j+1, n+1):
+            for j in range(i + 1, n + 1):
+                for k in range(j + 1, n + 1):
                     clause = [-self.p(i, j), -self.p(i, k)]
                     formula.append(clause)
 
         # subsets 1c and 1d
-        for i in range(1, n+1):
-            for j in range(i+1, n+1):
-                for k in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
                     if self.g.has_edge(i, k) == self.g.has_edge(j, k):
@@ -107,9 +107,9 @@ class Encoder:
                     formula.append(clause)
 
         # a
-        for i in range(1, n+1):
-            for j in range(i+1, n+1):
-                for k in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
                     # v1 ----
@@ -125,10 +125,10 @@ class Encoder:
                     formula.append(clause)
 
         # subset 1a
-        for i in range(1, n+1):
-            for j in range(1, n+1):
-                for k in range(1, n+1):
-                    for m in range(k+1, n+1):
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                for k in range(1, n + 1):
+                    for m in range(k + 1, n + 1):
                         if len({i, j, k, m}) < 4:
                             continue
                         clause = self.implies(
@@ -138,9 +138,9 @@ class Encoder:
                         formula.append(clause)
 
         # subset 1b
-        for i in range(1, n+1):
-            for j in range(i+1, n+1):
-                for k in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
                     clause = self.implies(
@@ -150,11 +150,11 @@ class Encoder:
                     formula.append(clause)
 
         # cardinality constraints
-        for i in range(1, n+1):
-            for j in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
                 # if len({i, j}) < 2:
                 #     continue
-                clause = [self.r(i, j, k) for k in range(1, n+1) if j != k]
+                clause = [self.r(i, j, k) for k in range(1, n + 1) if j != k]
                 formula.append([clause, self.tww], is_atmost=True)
 
         # v_n is the biggest
@@ -163,9 +163,9 @@ class Encoder:
             formula.append(clause)
 
         # if a vertex is no more, then there no edges from it
-        for i in range(1, n+1):
-            for j in range(i+1, n+1):
-                for k in range(1, n+1):
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
                     clause = self.implies(
@@ -176,15 +176,40 @@ class Encoder:
 
         return formula
 
+    def decode(self, model: list[int]):
+        n = len(self.g.nodes)
+
+        def value_of(variable_index):
+            # variable_index might be negative
+            # variables start with index 1
+            if variable_index > 0:
+                return model[variable_index-1] > 0
+            return model[-variable_index - 1] < 0
+
+        parents = {}
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                if i != j and value_of(self.p(i, j)):
+                    parents[i] = j
+                    break
+
+        # skip last element
+        order = [0] * (n-1)
+        for i in range(1, n):
+            bigger_than_i = [j for j in range(1, n + 1) if (j != i and value_of(self.o(i, j)))]
+            order[n - len(bigger_than_i) - 1] = i
+
+        sequence = [(v, parents[v]) for v in order]
+        return sequence
+
 
 def process(graph: nx.Graph):
-    for i in range(0, len(graph.nodes)+1):
+    for i in range(0, len(graph.nodes) + 1):
         encoder = Encoder(graph, i)
         formula = encoder.encode()
         with Solver(bootstrap_with=formula, name="gluecard4") as solver:
             if solver.solve():
+                sequence = encoder.decode(solver.get_model())
                 # TODO: decode and return sequence
-                return i
+                return i, sequence
     raise RuntimeError("How did we get here?")
-
-

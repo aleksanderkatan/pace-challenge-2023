@@ -21,6 +21,8 @@ if __name__ == '__main__':
     for file_name, expected_result in zip(sorted(file_names), expected_results):
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
-        result = process(graph)
-        print(f"{file_path}: expected: {expected_result}, our: {result}")
+        tww, sequence = process(graph)
+        print(f"{file_path}: expected: {expected_result}, our: {tww}")
+        print("Contraction sequence: \n" + "\n".join([f"{u} => {v}" for u, v in sequence]))
+        # draw_graph(graph)
 
