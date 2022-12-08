@@ -1,5 +1,7 @@
 from utility import *
-from algorithms.relative_encoding_algorithm import process
+from algorithms.down_up_checker import process
+from algorithms.encodings.relative_encoder import RelativeEncoder
+from algorithms.formula_preprocessing.duplicate_clauses_remover import DuplicateClauseRemover
 from algorithms.helpers import calculate_sequence_twinwidth
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -23,7 +25,7 @@ if __name__ == '__main__':
     for file_name, expected_result in zip(sorted(file_names), expected_results):
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
-        tww, sequence = process(graph)
+        tww, sequence = process(graph, RelativeEncoder(), [DuplicateClauseRemover()], "gluecard4")
         print(f"{file_path}: {expected_result}/{tww}/{calculate_sequence_twinwidth(graph, sequence)}")
         # print("Contraction sequence: \n" + "\n".join([f"{u} => {v}" for u, v in sequence]))
         # draw_graph(graph)

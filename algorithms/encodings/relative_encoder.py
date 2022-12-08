@@ -1,11 +1,18 @@
-from pysat.solvers import Solver
+from algorithms.encodings.abstract_encoder import AbstractEncoder
 from pysat.formula import IDPool
 from pysat.formula import CNFPlus
 import networkx as nx
 
 
-class Encoder:
-    def __init__(self, graph: nx.Graph, tww):
+class RelativeEncoder(AbstractEncoder):
+    def __init__(self):
+        self.g = None
+        self.tww = None
+        self.pool = None
+        self.v = {}
+
+    # has to be multiple use
+    def initialize_with_graph(self, graph: nx.Graph, tww):
         self.g = graph
         self.tww = tww
         self.pool = IDPool()
@@ -202,14 +209,3 @@ class Encoder:
         sequence = [(v, parents[v]) for v in order]
         return sequence
 
-
-def process(graph: nx.Graph):
-    for i in range(0, len(graph.nodes) + 1):
-        encoder = Encoder(graph, i)
-        formula = encoder.encode()
-        with Solver(bootstrap_with=formula, name="gluecard4") as solver:
-            if solver.solve():
-                sequence = encoder.decode(solver.get_model())
-                # TODO: decode and return sequence
-                return i, sequence
-    raise RuntimeError("How did we get here?")
