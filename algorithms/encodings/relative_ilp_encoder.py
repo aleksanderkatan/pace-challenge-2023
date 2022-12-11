@@ -14,11 +14,11 @@ def _implies(p, q):
 
 
 class SatToIlpEncoder:
-    def __init__(self, graph: nx.Graph, tww_upper_bound=None):
+    def __init__(self, graph: nx.Graph, solver: pywraplp.Solver, tww_upper_bound=None):
         if tww_upper_bound is None:
             tww_upper_bound = len(graph.nodes)
         self.tww_upper_bound = tww_upper_bound
-        self.solver = pywraplp.Solver.CreateSolver('SCIP')
+        self.solver = solver
         self.graph = graph
         self.variables = {}
         n = len(self.graph.nodes)
@@ -57,7 +57,7 @@ class SatToIlpEncoder:
     def tww(self):
         return self.variables["tww"]
 
-    def encode(self):
+    def solve(self):
         n = len(self.graph.nodes)
         # ordering
         for i in range(1, n + 1):
@@ -164,10 +164,10 @@ class SatToIlpEncoder:
         self.solver.Minimize(self.tww())
         status = self.solver.Solve()
         if status == pywraplp.Solver.OPTIMAL:
-            return int(self.solver.Objective().Value()), self.decode()
+            return int(self.solver.Objective().Value()), self._decode()
         raise RuntimeError("How did we get here?")
 
-    def decode(self):
+    def _decode(self):
         n = len(self.graph.nodes)
 
         parents = {}

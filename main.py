@@ -1,11 +1,12 @@
-from algorithms.formula_preprocessing.subsumption_remover import SubsumptionRemover
+# from algorithms.formula_preprocessing.subsumption_remover import SubsumptionRemover
 from utility import *
-from algorithms.down_up_sat_checker import process
-from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
-from algorithms.encodings.relative_ilp_encoder import SatToIlpEncoder
+# from algorithms.down_up_sat_checker import process
+# from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
+from algorithms.ilp_checker import process
 from algorithms.helpers import calculate_sequence_twinwidth
 import networkx as nx
 import matplotlib.pyplot as plt
+from ortools.linear_solver import pywraplp
 
 INSTANCES_PATH = 'instances'
 
@@ -27,8 +28,7 @@ if __name__ == '__main__':
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
 
-        enc = SatToIlpEncoder(graph)
-        tww, sequence = enc.encode()
+        tww, sequence = process(graph, pywraplp.Solver.CreateSolver("SCIP"))
         # tww, sequence = process(graph, RelativeEncoder(), [SubsumptionRemover()], "gluecard4")
         # tww, sequence = process(graph, RelativeSatEncoder(), [], "cadical")
         print(f"{file_path}: {expected_result}/{tww}/{calculate_sequence_twinwidth(graph, sequence)}")
