@@ -1,5 +1,5 @@
 import networkx as nx
-from algorithms.encodings.abstract_sat_encoder import AbstractEncoder
+from algorithms.encodings.abstract_sat_encoder import AbstractSatEncoder
 from pysat.solvers import Solver
 from algorithms.formula_preprocessing.abstract_preprocessing_algorithm import AbstractPreprocessingAlgorithm
 
@@ -19,7 +19,7 @@ def _process(formula, preprocesses: list[AbstractPreprocessingAlgorithm], solver
     return prep.reprocess_result(result)
 
 
-def process(graph: nx.Graph, encoder: AbstractEncoder, preprocesses: list[AbstractPreprocessingAlgorithm], solver_name):
+def process(graph: nx.Graph, encoder: AbstractSatEncoder, preprocesses: list[AbstractPreprocessingAlgorithm], solver_name):
     for i in range(0, len(graph.nodes) + 1):
         encoder.initialize_with_graph(graph, i)
         formula = encoder.encode()

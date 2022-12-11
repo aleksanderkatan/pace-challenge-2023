@@ -4,6 +4,7 @@ To install missing dependencies:
 
 `
 pip install networkx;
+pip install ortools;
 pip install python-sat
 `
 

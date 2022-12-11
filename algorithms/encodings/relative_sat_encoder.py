@@ -1,4 +1,4 @@
-from algorithms.encodings.abstract_sat_encoder import AbstractEncoder
+from algorithms.encodings.abstract_sat_encoder import AbstractSatEncoder
 from pysat.formula import IDPool
 from pysat.formula import CNF
 from pysat.card import CardEnc
@@ -11,7 +11,7 @@ def _implies(p, q):
     return [-p_i for p_i in p] + [q]
 
 
-class RelativeEncoder(AbstractEncoder):
+class RelativeSatEncoder(AbstractSatEncoder):
     def __init__(self):
         self.g = None
         self.tww = None

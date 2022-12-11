@@ -3,7 +3,7 @@ import networkx as nx
 
 
 # let's try and imitate an interface in python...
-class AbstractEncoder(abc.ABC):
+class AbstractSatEncoder(abc.ABC):
     @abc.abstractmethod
     def initialize_with_graph(self, graph: nx.Graph, tww):
         pass
