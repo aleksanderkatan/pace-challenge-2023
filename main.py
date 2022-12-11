@@ -1,6 +1,6 @@
 from utility import *
 from algorithms.down_up_checker import process
-from algorithms.encodings.relative_encoder import RelativeEncoder
+from algorithms.encodings.relative_sat_encoder import RelativeEncoder
 from algorithms.formula_preprocessing.subsumption_remover import SubsumptionRemover
 from algorithms.helpers import calculate_sequence_twinwidth
 import networkx as nx

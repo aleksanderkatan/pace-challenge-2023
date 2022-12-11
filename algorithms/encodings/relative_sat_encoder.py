@@ -1,7 +1,13 @@
-from algorithms.encodings.abstract_encoder import AbstractEncoder
+from algorithms.encodings.abstract_sat_encoder import AbstractEncoder
 from pysat.formula import IDPool
 from pysat.formula import CNFPlus
 import networkx as nx
+
+
+# implies([p_1, p_2, p_3], q) returns a clause equivalent to
+# p_1 && p_2 && p_3 => q
+def _implies(p, q):
+    return [-p_i for p_i in p] + [q]
 
 
 class RelativeEncoder(AbstractEncoder):
@@ -56,11 +62,6 @@ class RelativeEncoder(AbstractEncoder):
         # no negation here!!!
         return self.v["a", j, i]
 
-    # implies([p_1, p_2, p_3], q) returns a clause equivalent to
-    # p_1 && p_2 && p_3 => q
-    def implies(self, p, q):
-        return [-p_i for p_i in p] + [q]
-
     def encode(self):
         formula = CNFPlus()
         n = len(self.g.nodes)
@@ -71,7 +72,7 @@ class RelativeEncoder(AbstractEncoder):
                 for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
-                    clause = self.implies(
+                    clause = _implies(
                         [self.o(i, j), self.o(j, k)],
                         self.o(i, k)
                     )
@@ -81,7 +82,7 @@ class RelativeEncoder(AbstractEncoder):
         # i is the child of j => i << j
         for i in range(1, n + 1):
             for j in range(i + 1, n + 1):
-                clause = self.implies(
+                clause = _implies(
                     [self.p(i, j)],
                     self.o(i, j)
                 )
@@ -107,7 +108,7 @@ class RelativeEncoder(AbstractEncoder):
                         continue
                     if self.g.has_edge(i, k) == self.g.has_edge(j, k):
                         continue
-                    clause = self.implies(
+                    clause = _implies(
                         [self.p(i, j), self.o(i, k)],
                         self.r(i, j, k)
                     )
@@ -125,7 +126,7 @@ class RelativeEncoder(AbstractEncoder):
                     #     self.a(j, k)
                     # )
                     # v2 ----
-                    clause = self.implies(
+                    clause = _implies(
                         [self.r(k, i, j)],
                         self.a(i, j)
                     )
@@ -138,7 +139,7 @@ class RelativeEncoder(AbstractEncoder):
                     for m in range(k + 1, n + 1):
                         if len({i, j, k, m}) < 4:
                             continue
-                        clause = self.implies(
+                        clause = _implies(
                             [self.o(i, j), self.o(j, k), self.o(j, m), self.r(i, k, m)],
                             self.r(j, k, m)
                         )
@@ -150,7 +151,7 @@ class RelativeEncoder(AbstractEncoder):
                 for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
-                    clause = self.implies(
+                    clause = _implies(
                         [self.p(i, j), self.o(i, k), self.a(i, k)],
                         self.r(i, j, k)
                     )
@@ -175,7 +176,7 @@ class RelativeEncoder(AbstractEncoder):
                 for k in range(1, n + 1):
                     if len({i, j, k}) < 3:
                         continue
-                    clause = self.implies(
+                    clause = _implies(
                         [self.o(j, i)],
                         -self.r(i, j, k)
                     )

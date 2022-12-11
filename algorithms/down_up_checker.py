@@ -1,5 +1,5 @@
 import networkx as nx
-from algorithms.encodings.abstract_encoder import AbstractEncoder
+from algorithms.encodings.abstract_sat_encoder import AbstractEncoder
 from pysat.solvers import Solver
 from algorithms.formula_preprocessing.abstract_preprocessing_algorithm import AbstractPreprocessingAlgorithm
 
