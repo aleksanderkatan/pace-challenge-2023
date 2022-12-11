@@ -1,6 +1,7 @@
 from algorithms.encodings.abstract_sat_encoder import AbstractEncoder
 from pysat.formula import IDPool
-from pysat.formula import CNFPlus
+from pysat.formula import CNF
+from pysat.card import CardEnc
 import networkx as nx
 
 
@@ -63,7 +64,7 @@ class RelativeEncoder(AbstractEncoder):
         return self.v["a", j, i]
 
     def encode(self):
-        formula = CNFPlus()
+        formula = CNF()
         n = len(self.g.nodes)
 
         # ordering
@@ -162,8 +163,11 @@ class RelativeEncoder(AbstractEncoder):
             for j in range(1, n + 1):
                 # if len({i, j}) < 2:
                 #     continue
-                clause = [self.r(i, j, k) for k in range(1, n + 1) if j != k]
-                formula.append([clause, self.tww], is_atmost=True)
+                literals = [self.r(i, j, k) for k in range(1, n + 1) if j != k]
+                # formula.append([literals, self.tww], is_atmost=True)
+                clauses = CardEnc.atmost(literals, bound=self.tww, vpool=self.pool)
+                for clause in clauses:
+                    formula.append(clause)
 
         # v_n is the biggest
         for i in range(1, n):

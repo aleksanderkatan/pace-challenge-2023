@@ -1,5 +1,5 @@
 from algorithms.formula_preprocessing.abstract_preprocessing_algorithm import AbstractPreprocessingAlgorithm
-from pysat.formula import CNFPlus
+from pysat.formula import CNF
 
 
 def _contains(smaller_clause, bigger_clause):
@@ -24,7 +24,7 @@ class SubsumptionRemover(AbstractPreprocessingAlgorithm):
         self.formula = formula
 
     def preprocess_formula(self):
-        assert issubclass(type(self.formula), CNFPlus)
+        assert issubclass(type(self.formula), CNF)
         clauses_number = len(self.formula.clauses)
         indices_to_remove = set()
         for i in range(clauses_number):
@@ -36,12 +36,10 @@ class SubsumptionRemover(AbstractPreprocessingAlgorithm):
                 elif _contains(other, clause):
                     indices_to_remove.add(i)
 
-        new_formula = CNFPlus()
+        new_formula = CNF()
         new_clauses = [clause for i, clause in enumerate(self.formula.clauses) if i not in indices_to_remove]
         for clause in new_clauses:
             new_formula.append(clause)
-        for at_most_clause in self.formula.atmosts:
-            new_formula.append(at_most_clause, is_atmost=True)
         print(f"SubsumptionRemover shortened clauses from {len(self.formula.clauses)} to {len(new_formula.clauses)}")
 
         return new_formula
