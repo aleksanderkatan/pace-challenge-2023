@@ -14,18 +14,7 @@ def calculate_sequence_twinwidth(graph: nx.Graph, sequence):
     return max_red
 
 
-def read_directory(path):
-    file_names = os.listdir(path)
-    file_contents = []
-    for file_name in file_names:
-        file_path = os.path.join(path, file_name)
-        with open(file_path, 'r') as f:
-            c = [line for line in f.read().split("\n") if not line.startswith("c")]
-            file_contents.append(c)
-    return file_contents
-
-
-def parse_graph(path):
+def read_graph(path):
     lines = _preprocess_file(path)
     n, m = (int(num) for num in lines[0].split(" ")[2:])
 
@@ -35,6 +24,15 @@ def parse_graph(path):
         g.add_edge(u, v)
 
     return g
+
+
+def write_graph(graph: nx.Graph, file_name):
+    t = [f"p tww {len(graph.nodes)} {len(graph.edges)}"]
+    for u, v in graph.edges:
+        t.append(f"{u} {v}")
+    s = "\n".join(t)
+    with open(file_name, "w") as f:
+        f.write(s)
 
 
 def _preprocess_file(path):
