@@ -1,0 +1,26 @@
+our RelativeSatEncoder with cadical solver
+benchmark_instances\cograph_32.gr: time: 2.042529344558716, twinwidth: 0
+benchmark_instances\cograph_64.gr: time: 27.826674461364746, twinwidth: 0
+benchmark_instances\edge_chance_0.5_16.gr: time: 1.152425765991211, twinwidth: 4
+benchmark_instances\edge_chance_0.5_32.gr: timeout (>120)
+benchmark_instances\grid_4x4.gr: time: 0.7183759212493896, twinwidth: 3
+benchmark_instances\grid_6x6.gr: time: 69.79055452346802, twinwidth: 3
+benchmark_instances\planar_16.gr: time: 0.7625699043273926, twinwidth: 3
+benchmark_instances\planar_32.gr: timeout (>120)
+benchmark_instances\tree_16.gr: time: 0.42833805084228516, twinwidth: 2
+benchmark_instances\tree_32.gr: time: 18.147053956985474, twinwidth: 2
+
+our ilp:
++inf
+
+not our relative:
+benchmark_instances\cograph_32.gr: time: ~0, twinwidth: 0
+benchmark_instances\cograph_64.gr: time: ~0, twinwidth: 0
+benchmark_instances\edge_chance_0.5_16.gr: time: 0.2985188961029053, twinwidth: 4
+benchmark_instances\edge_chance_0.5_32.gr: timeout (>120)
+benchmark_instances\grid_4x4.gr: time: 0.23105692863464355, twinwidth: 3
+benchmark_instances\grid_6x6.gr: timeout (>120)
+benchmark_instances\planar_16.gr: time: 0.43538427352905273, twinwidth: 3
+benchmark_instances\planar_32.gr: time: 89.61156272888184, twinwidth: 3
+benchmark_instances\tree_16.gr: time: 0.09762692451477051, twinwidth: 2
+benchmark_instances\tree_32.gr: time: 4.677403926849365, twinwidth: 2
