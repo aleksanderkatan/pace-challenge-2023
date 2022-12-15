@@ -1,12 +1,12 @@
-# from algorithms.formula_preprocessing.subsumption_remover import SubsumptionRemover
-from utility import *
-# from algorithms.down_up_sat_checker import process
-# from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
-from algorithms.ilp_checker import process
-from algorithms.helpers import calculate_sequence_twinwidth
+from algorithms.formula_preprocessing.subsumption_remover import SubsumptionRemover
+from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
+from algorithms.down_up_sat_checker import process
+# from algorithms.ilp_checker import process
+from algorithms.helpers import calculate_sequence_twinwidth, parse_graph
 import networkx as nx
 import matplotlib.pyplot as plt
 from ortools.linear_solver import pywraplp
+import os
 
 INSTANCES_PATH = 'instances'
 
@@ -28,9 +28,9 @@ if __name__ == '__main__':
         file_path = os.path.join(INSTANCES_PATH, file_name)
         graph = parse_graph(file_path)
 
-        tww, sequence = process(graph, pywraplp.Solver.CreateSolver("SCIP"))
-        # tww, sequence = process(graph, RelativeEncoder(), [SubsumptionRemover()], "gluecard4")
-        # tww, sequence = process(graph, RelativeSatEncoder(), [], "cadical")
+        # tww, sequence = process(graph, pywraplp.Solver.CreateSolver("SCIP"))
+        # tww, sequence = process(graph, RelativeSatEncoder(), [SubsumptionRemover()], "gluecard4")
+        tww, sequence = process(graph, RelativeSatEncoder(), [], "cadical")
         print(f"{file_path}: {expected_result}/{tww}/{calculate_sequence_twinwidth(graph, sequence)}")
         # print("Contraction sequence: \n" + "\n".join([f"{u} => {v}" for u, v in sequence]))
         # draw_graph(graph)
