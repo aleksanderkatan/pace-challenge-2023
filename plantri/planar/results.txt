@@ -1,0 +1,10 @@
+Planar graphs with min degree 5
+12 vertices - max tww is 4 for 12 bcdef,afghc,abhid,acije,adjkf,aekgb,bfklh,bglic,chljd,dilke,ejlgf,gkjih
+13 vertices - no such graphs
+14 vertices - max tww is 4 for 14 bcdef,afghc,abhid,acije,adjkf,aeklgb,bflmh,bgmic,chmnjd,dinke,ejnlf,fknmg,glnih,imlkj
+15 vertices - max tww is 4 for 15 bcdefg,aghic,abijd,acjke,adklf,aelmg,afmhb,bgmni,bhnjc,cinokd,djole,ekomf,flonhg,hmoji,jnmlk
+16 vertices - max tww is 5 for 16 bcdef,afghc,abhijd,acjke,adklf,aelmgb,bfmnh,bgnic,chnoj,ciokd,djople,ekpmf,flpng,gmpoih,inpkj,konml
+17 vertices - max tww is 5 for 17 bcdef,afghc,abhid,acijke,adklf,aelmgb,bfmnh,bgnoic,chojd,diopk,djpqle,ekqmf,flqng,gmqpoh,hnpji,jonqk,kpnml
+18 vertices - max tww is 5 for 18 bcdef,afghc,abhid,acije,adjklf,aelmgb,bfmnh,bgnoic,chopjd,dipke,ejpql,ekqrmf,flrng,gmroh,hnrqpi,ioqkj,kporl,lqonm
+
+

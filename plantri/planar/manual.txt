@@ -1,0 +1,3 @@
+Graphs are too big to push them. Generate them yourself.
+
+for i in {1..25}; do ./plantri53/plantri -pm5va $i planar_graphs/planar_graphs_"$i".txt; done
