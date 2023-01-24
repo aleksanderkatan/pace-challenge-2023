@@ -1,12 +1,10 @@
-from algorithms.formula_preprocessing.subsumption_remover import SubsumptionRemover
 from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
 from algorithms.down_up_sat_checker import process
 # from algorithms.ilp_checker import process
-from algorithms.helpers import calculate_twinwidth_of_sequence, read_graph
+from algorithms.other.helpers import calculate_twinwidth_of_sequence, read_graph
 from algorithms.graph_preprocessing_wrapper import graph_preprocessing_wrapper
 import networkx as nx
 import matplotlib.pyplot as plt
-from ortools.linear_solver import pywraplp
 import os
 
 INSTANCES_PATH = 'instances'

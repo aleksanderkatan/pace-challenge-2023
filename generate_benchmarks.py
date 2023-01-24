@@ -1,10 +1,9 @@
 from algorithms.graph_preprocessing_wrapper import graph_preprocessing_wrapper
 from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
 from algorithms.down_up_sat_checker import process
-from ortools.linear_solver import pywraplp
 
 # from algorithms.ilp_checker import process
-from algorithms.helpers import read_graph
+from algorithms.other.helpers import read_graph
 import os
 import time
 import func_timeout

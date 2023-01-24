@@ -82,6 +82,7 @@ def connected_components(graph: nx.Graph):
 def is_connected(graph: nx.Graph):
     return len(connected_components(graph)) == 1
 
+
 def complement(graph: nx.Graph) -> nx.Graph:
     gg = graph.copy()
     gg.clear_edges()
@@ -92,6 +93,7 @@ def complement(graph: nx.Graph) -> nx.Graph:
             if not graph.has_edge(u, v) and not gg.has_edge(u, v):
                 gg.add_edge(u, v)
     return gg
+
 
 def modular_decomposition(graph: nx.Graph):
     if graph.is_directed():
@@ -131,7 +133,7 @@ def modular_decomposition(graph: nx.Graph):
         for v in graph.neighbors(vertex):
             if v not in vertex_dist:
                 vertex_dist[v] = distance + 1
-                q.append((v, distance+1))
+                q.append((v, distance + 1))
 
         if distance == 1:
             vertex_status[vertex] = LEFT_OF_SOURCE
@@ -176,7 +178,6 @@ def number_components(root, vertex_status):
 
     for tree in root[1]:
 
-
         if tree[0].node_type == NORMAL and \
                 vertex_status[tree[1][0]] == SOURCE:
             flag = True
@@ -200,8 +201,6 @@ def number_cocomponents(root, vertex_status):
 
 
 def recursively_number_cocomponents(tree, cocomp_num, by_type):
-
-
     def number_subtree(tree, number):
         tree[0].comp_num = number
         if tree[0].node_type != NORMAL:
@@ -223,7 +222,6 @@ def recursively_number_cocomponents(tree, cocomp_num, by_type):
 
 
 def assembly(graph, root, vertex_status, vertex_dist):
-
     mu = {}
 
     source_index = -1
@@ -368,7 +366,6 @@ def check_prime(graph, root, left, right,
 def check_parallel(graph, root, left, right,
                    source_index, mu, vertex_dist,
                    vertices_in_component):
-
     new_right_index = source_index
 
     while new_right_index + 1 < len(root[1]):
@@ -481,7 +478,6 @@ def get_vertex_in(tree):
 
 def compute_mu_for_co_component(graph, component_index, source_index,
                                 root, vertices_in_component):
-
     for index in range(len(root[1]) - 1, source_index, -1):
         if is_component_connected(graph, component_index,
                                   index, vertices_in_component):
@@ -492,7 +488,6 @@ def compute_mu_for_co_component(graph, component_index, source_index,
 
 def compute_mu_for_component(graph, component_index, source_index,
                              root, vertices_in_component):
-
     mu_for_component = root[1][0]
 
     for index in range(0, source_index):
@@ -505,7 +500,6 @@ def compute_mu_for_component(graph, component_index, source_index,
 
 
 def is_component_connected(graph, index1, index2, vertices_in_component):
-
     vertices = vertices_in_component[index1]
     index2_vertices_set = set(vertices_in_component[index2])
 
@@ -618,7 +612,6 @@ def promote_child(root):
 
 
 def clear_node_split_info(root):
-
     root[0].node_split = NO_SPLIT
 
     if root[0].node_type != NORMAL:
@@ -653,7 +646,6 @@ def get_child_splits(root):
 
 def maximal_subtrees_with_leaves_in_x(root, v, x, vertex_status,
                                       tree_left_of_source, level):
-
     def update_node_info(node, node_type, node_split, comp_num, subtree_list):
         node[0].node_type = node_type
         node[0].node_split = node_split
@@ -757,7 +749,6 @@ def create_normal_node(vertex):
 
 
 def print_md_tree(root):
-
     def recursive_print_md_tree(root, level):
         if root[0].node_type != NORMAL:
             print("{}{}".format(level, str(root[0])))
@@ -767,4 +758,3 @@ def print_md_tree(root):
             print("{}{}".format(level, str(root[1][0])))
 
     recursive_print_md_tree(root, "")
-

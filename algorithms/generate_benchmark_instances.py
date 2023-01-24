@@ -1,4 +1,4 @@
-from algorithms.helpers import write_graph
+from algorithms.other.helpers import write_graph
 import networkx as nx
 import random
 

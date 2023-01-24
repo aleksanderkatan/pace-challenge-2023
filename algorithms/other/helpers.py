@@ -1,7 +1,5 @@
-import os
-
 import networkx as nx
-from algorithms.trigraph import Trigraph
+from algorithms.other.trigraph import Trigraph
 
 
 def calculate_twinwidth_of_sequence(graph: nx.Graph, sequence):
