@@ -4,7 +4,7 @@ import networkx as nx
 from algorithms.trigraph import Trigraph
 
 
-def calculate_sequence_twinwidth(graph: nx.Graph, sequence):
+def calculate_twinwidth_of_sequence(graph: nx.Graph, sequence):
     trigraph = Trigraph(graph)
     max_red = 0
     for u, v in sequence:
