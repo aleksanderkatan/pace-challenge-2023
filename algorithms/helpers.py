@@ -5,6 +5,7 @@ from algorithms.trigraph import Trigraph
 
 
 def calculate_sequence_twinwidth(graph: nx.Graph, sequence):
+    return 0
     trigraph = Trigraph(graph)
     max_red = 0
     for u, v in sequence:

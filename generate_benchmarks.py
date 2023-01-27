@@ -1,17 +1,17 @@
 import networkx as nx
 
-# from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
-# from algorithms.down_up_sat_checker import process
+from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
+from algorithms.down_up_sat_checker import process, process_modules
 from ortools.linear_solver import pywraplp
 
-from algorithms.ilp_checker import process
+# from algorithms.ilp_checker import process
 from algorithms.helpers import read_graph
 import os
 import time
 import func_timeout
 
 INSTANCES_PATH = 'benchmark_instances'
-TIMEOUT = 2
+TIMEOUT = 120
 
 
 if __name__ == '__main__':
@@ -24,8 +24,8 @@ if __name__ == '__main__':
         start_time = time.time()
         try:
             tww, sequence = func_timeout.func_timeout(TIMEOUT,
-                                                      # lambda: process(graph, RelativeSatEncoder(), [], "cadical"))
-                                                      lambda: process(graph, pywraplp.Solver.CreateSolver("SCIP")))
+                                                      lambda: process_modules(graph, RelativeSatEncoder(), [], "cadical"))
+                                                      # lambda: process(graph, pywraplp.Solver.CreateSolver("SCIP")))
             print(f"time: {time.time() - start_time}, twinwidth: {tww}")
         except func_timeout.FunctionTimedOut:
             print(f"timeout (>{TIMEOUT})")
