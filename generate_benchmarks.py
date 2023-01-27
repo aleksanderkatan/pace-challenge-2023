@@ -1,6 +1,6 @@
 from algorithms.graph_preprocessing_wrapper import graph_preprocessing_wrapper
 from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
-from algorithms.down_up_sat_checker import process
+from algorithms.down_up_sat_checker import process, process_modules
 
 # from algorithms.ilp_checker import process
 from algorithms.other.helpers import read_graph
@@ -13,6 +13,7 @@ TIMEOUT = 2
 
 
 def preprocess_base_graph(g):
+    # return process_modules(g, RelativeSatEncoder(), [], "cadical")
     return process(g, RelativeSatEncoder(), [], "cadical")
 
 

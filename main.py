@@ -1,5 +1,5 @@
 from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
-from algorithms.down_up_sat_checker import process
+from algorithms.down_up_sat_checker import process_modules, process, process_from_top
 # from algorithms.ilp_checker import process
 from algorithms.other.helpers import calculate_twinwidth_of_sequence, read_graph
 from algorithms.graph_preprocessing_wrapper import graph_preprocessing_wrapper
@@ -19,7 +19,9 @@ def draw_graph(g: nx.Graph):
 
 
 def preprocess_base_graph(g):
-    return process(g, RelativeSatEncoder(), [], "cadical")
+    return process_from_top(g, RelativeSatEncoder(), [], "cadical")
+    # return process(g, RelativeSatEncoder(), [], "cadical")
+    # return process_modules(g, RelativeSatEncoder(), [], "cadical")
 
 
 if __name__ == '__main__':
@@ -31,5 +33,6 @@ if __name__ == '__main__':
 
         tww, sequence = graph_preprocessing_wrapper(graph, preprocess_base_graph)
         print(f"{file_path}: {expected_result}/{tww}/{calculate_twinwidth_of_sequence(graph, sequence)}")
+        # print(sequence)
         # print("Contraction sequence: \n" + "\n".join([f"{u} => {v}" for u, v in sequence]))
         # draw_graph(graph)

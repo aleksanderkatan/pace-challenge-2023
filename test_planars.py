@@ -1,5 +1,6 @@
-from algorithms.down_up_sat_checker import process
+from algorithms.down_up_sat_checker import process_modules, process, process_from_top
 from algorithms.encodings.relative_sat_encoder import RelativeSatEncoder
+from algorithms.graph_preprocessing_wrapper import graph_preprocessing_wrapper
 import networkx
 import os
 
@@ -31,6 +32,12 @@ def _string_vertex_to_nx_vertex(v):
     return ord(v) - ord("a") + 1
 
 
+def preprocess_base_graph(g):
+    # return process_modules(g, RelativeSatEncoder(), [], "cadical")
+    return process_from_top(g, RelativeSatEncoder(), [], "cadical")
+    # return process(g, RelativeSatEncoder(), [], "cadical")
+
+
 print(f"Planar graphs with min degree 5")
 for v in vertices_to_check:
     file_path = os.path.join(instances_path, _get_file_name(v))
@@ -40,7 +47,7 @@ for v in vertices_to_check:
     with open(file_path, "r") as file:
         for line in file:
             graph = _scan_graph(line)
-            tww, sequence = process(graph, RelativeSatEncoder(), [], "cadical")
+            tww, sequence = graph_preprocessing_wrapper(graph, preprocess_base_graph)
             if tww > max_tww:
                 max_tww = tww
                 graph_with_max_tww = line

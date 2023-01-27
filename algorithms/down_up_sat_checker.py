@@ -32,6 +32,21 @@ def process(graph: nx.Graph, encoder: AbstractSatEncoder, preprocesses: list[Abs
         return i, sequence
     raise RuntimeError("How did we get here?")
 
+
+def process_from_top(graph: nx.Graph, encoder: AbstractSatEncoder, preprocesses: list[AbstractPreprocessingAlgorithm],
+            solver_name):
+    tww, sequence = None, None
+    for i in reversed(range(0, len(graph.nodes) + 1)):
+        encoder.initialize_with_graph(graph, i)
+        formula = encoder.encode()
+        result = _process(formula, preprocesses, solver_name)
+        if result is None:
+            return tww, sequence
+        sequence = encoder.decode(result)
+        tww = i
+    return 0, sequence
+
+
 def modules(root):
     if root[0].node_type == 3:
         return (root[1], [root[1]])
